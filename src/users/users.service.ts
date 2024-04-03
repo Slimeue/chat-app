@@ -40,4 +40,8 @@ export class UsersService {
 
     return this.userModel.findOne({ email });
   }
+
+  async findAllExceptCurrentUser(id: string) {
+    return this.userModel.find({ id: { $ne: id } });
+  }
 }

@@ -5,7 +5,8 @@
 type User {
   id: ID!
   email: String!
-  password: String!
+  password: String
+  users: [User!]
 }
 
 type Message {
