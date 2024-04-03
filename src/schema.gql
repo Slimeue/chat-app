@@ -1,0 +1,95 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  email: String!
+  password: String!
+}
+
+type Message {
+  id: String!
+  content: String!
+  senderId: String
+  receiverId: String
+  messages(receiverId: String!): [Message!]
+}
+
+type ChatRoom {
+  id: String!
+  name: String!
+  ownerId: String!
+  chatRooms(input: ChatRoomPaginationInput!): ChatRoomSearch
+}
+
+input ChatRoomPaginationInput {
+  page: Float = 1
+  limit: Float = 10
+  userId: String
+}
+
+type ChatRoomMember {
+  id: String!
+  chatRoomId: String!
+  userId: String!
+}
+
+type Meta {
+  total: Float!
+  page: Float!
+  limit: Float!
+}
+
+type ChatRoomSearch {
+  item: [ChatRoom!]!
+  meta: Meta!
+}
+
+type ChatRoomInvitationToken {
+  id: String!
+  chatRoomId: String!
+  userId: String!
+  token: String!
+}
+
+type Query {
+  userQuery: User!
+  messageQuery: Message
+  chatRoomQuery: ChatRoom
+}
+
+type Mutation {
+  createMessage(input: CreateMessageInput!): Message!
+  createChatRoom(input: CreateChatRoomInput!): ChatRoom!
+  createChatRoomMember(input: CreateChatRoomMemberInput!): ChatRoomMember!
+  acceptInvitation(input: TokenInput!): ChatRoomMember!
+  creatChatRoomInvitationToken(input: CreateChatRoomInvitationTokenInput!): ChatRoomInvitationToken!
+}
+
+input CreateMessageInput {
+  content: String!
+  senderId: String!
+  receiverId: String!
+}
+
+input CreateChatRoomInput {
+  name: String!
+}
+
+input CreateChatRoomMemberInput {
+  chatRoomId: String!
+  userId: String!
+}
+
+input TokenInput {
+  token: String!
+}
+
+input CreateChatRoomInvitationTokenInput {
+  chatRoomId: String!
+}
+
+type Subscription {
+  messageCreated: Message!
+}
