@@ -24,8 +24,10 @@ export class AuthController {
       return res.status(400).json({ message: 'Email is required' });
     }
 
-    const user = (await this.authService.login(input)) as LoginResponse;
-    return res.status(200).json(user);
+    const user = await this.authService.login(input);
+    const cleanUser = omit(user.user.toObject(), ['password']);
+    const payload = { token: user.token, user: cleanUser } as LoginResponse;
+    return res.status(200).json(payload);
   }
   @IsPublic()
   @Post('/signup')

@@ -16,6 +16,7 @@ import { get } from 'lodash';
 import { ChatRoomModule } from './ChatRoom/chatRoom.module';
 import { ChatRoomMemberModule } from './ChatRoomMember/chatRoomMember.module';
 import { ChatRoomInvitationTokenModule } from './ChatRoomInvitationToken/chatRoomInvitation.module';
+import { FirebaseModule } from './firebase/firebase.module';
 @Module({
   imports: [
     MessageGatewayModule,
@@ -77,6 +78,7 @@ import { ChatRoomInvitationTokenModule } from './ChatRoomInvitationToken/chatRoo
     ChatRoomModule,
     ChatRoomMemberModule,
     ChatRoomInvitationTokenModule,
+    FirebaseModule,
   ],
   controllers: [],
   providers: [
