@@ -92,5 +92,9 @@ input CreateChatRoomInvitationTokenInput {
 }
 
 type Subscription {
-  messageCreated: Message!
+  messageCreated(receiverId: CreateMessageSubscriptionInput!): Message!
+}
+
+input CreateMessageSubscriptionInput {
+  receiverId: String!
 }

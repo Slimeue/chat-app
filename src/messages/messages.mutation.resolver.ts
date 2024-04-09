@@ -1,6 +1,9 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Message } from './messages.schema';
-import { CreateMessageInput } from './messages.types';
+import {
+  CreateMessageInput,
+  CreateMessageSubscriptionInput,
+} from './messages.types';
 import { CurrentUser } from 'src/auth/decorator/currentUser.decorator';
 import { User } from 'src/users/users.schema';
 import { MessagesService } from './messages.service';
@@ -22,9 +25,12 @@ export class MessagesMutationResolver {
   ) {
     const { id } = user;
     const message = await this.messageService.create(input, id);
-    await this.pubSub.publish(SUBSCIRTION_EVENTS.MESSAGE_CREATED, {
-      messageCreated: message,
-    });
+    await this.pubSub.publish(
+      `${SUBSCIRTION_EVENTS.MESSAGE_CREATED}:${input.receiverId}`,
+      {
+        messageCreated: message,
+      },
+    );
     return message;
   }
 }

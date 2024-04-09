@@ -11,3 +11,9 @@ export class CreateMessageInput {
   @Field()
   receiverId: string;
 }
+
+@InputType()
+export class CreateMessageSubscriptionInput {
+  @Field()
+  receiverId: string;
+}

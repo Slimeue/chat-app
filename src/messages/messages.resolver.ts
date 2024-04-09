@@ -14,6 +14,7 @@ import { SUBSCIRTION_EVENTS } from 'src/constants';
 import { CurrentUser } from 'src/auth/decorator/currentUser.decorator';
 import { User } from 'src/users/users.schema';
 import { MessagesService } from './messages.service';
+import { CreateMessageSubscriptionInput } from './messages.types';
 
 @Resolver(() => Message)
 export class MessagesResolver {
@@ -39,7 +40,14 @@ export class MessagesResolver {
   }
 
   @Subscription(() => Message)
-  async messageCreated(@Context() { payload }: { payload: Message }) {
-    return await this.pubSub.asyncIterator(SUBSCIRTION_EVENTS.MESSAGE_CREATED);
+  async messageCreated(
+    @CurrentUser() user: User,
+    @Args('receiverId') receiverId: CreateMessageSubscriptionInput,
+  ) {
+    console.log('receiverId', receiverId.receiverId);
+
+    return await this.pubSub.asyncIterator(
+      `${SUBSCIRTION_EVENTS.MESSAGE_CREATED}:${receiverId.receiverId}`,
+    );
   }
 }

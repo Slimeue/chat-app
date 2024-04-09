@@ -42,15 +42,15 @@ export class ChatRoomMemberMutationResolver {
       throw new Error('Token not found');
     }
 
-    const { id: roomId } = chatRoomInvitationToken;
+    const { chatRoomId } = chatRoomInvitationToken;
 
-    if (!userId || !roomId) {
+    if (!userId || !chatRoomId) {
       throw new Error('User or room not found');
     }
 
     const chatRoomMember = await this.chatRoomMemberService.create({
       userId,
-      chatRoomId: roomId,
+      chatRoomId,
     });
 
     if (!chatRoomMember) {

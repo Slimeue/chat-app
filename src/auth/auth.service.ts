@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from 'src/users/users.schema';
 import { UsersService } from 'src/users/users.service';
 import { UserLogInInput } from './auth.types';
 import { comparePasswords } from 'src/common.service';
 import { JwtService } from '@nestjs/jwt';
 import { isEmpty } from 'class-validator';
+import { omit } from 'lodash';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +25,7 @@ export class AuthService {
   }
 
   async login(input: UserLogInInput) {
-    const { email, password } = input;
+    const { email, password: inputPassword } = input;
 
     if (!email) {
       throw new Error('Email is required');
@@ -34,20 +33,25 @@ export class AuthService {
 
     const user = await this.userService.findOne(email);
 
-    let jwtToken: string;
+    let token: string;
     if (!isEmpty(user)) {
-      const isPasswordMatch = await comparePasswords(password, user.password);
+      const isPasswordMatch = await comparePasswords(
+        inputPassword,
+        user.password,
+      );
 
       if (!isPasswordMatch) {
         throw new Error('Password is incorrect');
       }
 
       const payload = { user };
-      jwtToken = await this.jwtService.signAsync(payload);
+      const cleanUser = omit(payload?.user?.toObject(), ['password']);
+      const toUser = { user: cleanUser };
+      token = await this.jwtService.signAsync(toUser);
     }
 
     return {
-      jwtToken,
+      token,
       user,
     };
   }
