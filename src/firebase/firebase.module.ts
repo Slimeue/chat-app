@@ -13,6 +13,7 @@ import {
   UNIVERSE_DOMAIN,
 } from 'src/config';
 import * as admin from 'firebase-admin';
+import { FirebaseService } from './firebase.service';
 const { privateKey } = JSON.parse(PRIVATE_KEY);
 export const firebaseProvider = {
   provide: 'FIREBASE_APP',
@@ -39,7 +40,7 @@ export const firebaseProvider = {
 };
 @Module({
   imports: [],
-  providers: [firebaseProvider],
-  exports: [],
+  providers: [firebaseProvider, FirebaseService],
+  exports: [FirebaseService],
 })
 export class FirebaseModule {}

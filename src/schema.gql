@@ -6,6 +6,9 @@ type User {
   id: ID!
   email: String!
   password: String
+  name: String
+  accountProfileImageUrl: String
+  accountProfileImageName: String
   users: [User!]
 }
 
@@ -61,12 +64,16 @@ type Query {
 }
 
 type Mutation {
+  addProfileImage(image: Upload!): User!
   createMessage(input: CreateMessageInput!): Message!
   createChatRoom(input: CreateChatRoomInput!): ChatRoom!
   createChatRoomMember(input: CreateChatRoomMemberInput!): ChatRoomMember!
   acceptInvitation(input: TokenInput!): ChatRoomMember!
   creatChatRoomInvitationToken(input: CreateChatRoomInvitationTokenInput!): ChatRoomInvitationToken!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateMessageInput {
   content: String!

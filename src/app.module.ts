@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MessageGatewayModule } from './MessageGateway/message.gateway.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -17,6 +17,8 @@ import { ChatRoomModule } from './ChatRoom/chatRoom.module';
 import { ChatRoomMemberModule } from './ChatRoomMember/chatRoomMember.module';
 import { ChatRoomInvitationTokenModule } from './ChatRoomInvitationToken/chatRoomInvitation.module';
 import { FirebaseModule } from './firebase/firebase.module';
+import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+import { CommonService } from './common.service';
 @Module({
   imports: [
     MessageGatewayModule,
@@ -86,6 +88,12 @@ import { FirebaseModule } from './firebase/firebase.module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    CommonService,
   ],
+  exports: [CommonService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(graphqlUploadExpress()).forRoutes('graphql');
+  }
+}

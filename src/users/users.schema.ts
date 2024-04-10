@@ -17,6 +17,18 @@ export class User {
   @Field({ nullable: true })
   @Prop()
   password: string;
+
+  @Field({ nullable: true })
+  @Prop()
+  name: string;
+
+  @Field({ nullable: true })
+  @Prop()
+  accountProfileImageUrl: string;
+
+  @Field({ nullable: true })
+  @Prop()
+  accountProfileImageName: string;
 }
 
 export type UserDocument = User & Document;

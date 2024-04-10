@@ -7,7 +7,6 @@ export class FirebaseService {
   constructor(@Inject('FIREBASE_APP') private firebaseApp: app.App) {}
 
   async getStorageInstance(): Promise<storage.Storage> {
-    console.log('storage', this.storage);
     return this.storage;
   }
 }

@@ -26,3 +26,9 @@ export class Meta {
   @Field()
   limit: number;
 }
+
+export type UploadFile = {
+  url: string;
+  fileName: string;
+  mimetype?: string;
+};
