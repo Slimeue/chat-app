@@ -21,13 +21,16 @@ export class CommonService {
     return new Promise(async (resolve, rejects) => {
       createReadStream()
         .pipe(bucketFile.createWriteStream())
-        .on('finish', async () =>
+        .on('finish', async () => {
+          await bucket.file(fileName).makePublic();
+          const meta = await bucket.file(fileName).getMetadata();
+          console.log(meta);
           resolve({
             url: `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${fileName}`,
             fileName,
             mimetype,
-          }),
-        )
+          });
+        })
         .on('error', rejects);
     });
   }
