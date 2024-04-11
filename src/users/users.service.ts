@@ -58,8 +58,6 @@ export class UsersService {
       userId,
     );
 
-    console.log(mimetype);
-
     const updatedUser = await this.userModel.findOneAndUpdate(
       { id: userId },
       {

@@ -23,10 +23,14 @@ export class CommonService {
         .pipe(bucketFile.createWriteStream())
         .on('finish', async () => {
           await bucket.file(fileName).makePublic();
-          const meta = await bucket.file(fileName).getMetadata();
-          console.log(meta);
+
+          const downloadUrl =
+            await this.firebaseService.getDownloadUrl(fileName);
+
+          console.log(downloadUrl);
+
           resolve({
-            url: `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${fileName}`,
+            url: `${downloadUrl}`,
             fileName,
             mimetype,
           });

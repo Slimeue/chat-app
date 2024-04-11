@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { app, storage } from 'firebase-admin';
-import { getStorage } from 'firebase-admin/storage';
+import { getStorage, getDownloadURL } from 'firebase-admin/storage';
 
 export class FirebaseService {
   private readonly storage = getStorage(this.firebaseApp);
@@ -8,5 +8,14 @@ export class FirebaseService {
 
   async getStorageInstance(): Promise<storage.Storage> {
     return this.storage;
+  }
+
+  async getDownloadUrl(fileName: string): Promise<string> {
+    const bucket = this.storage.bucket();
+
+    const ref = bucket.file(fileName);
+    const downloadUrl = await getDownloadURL(ref);
+
+    return downloadUrl;
   }
 }
