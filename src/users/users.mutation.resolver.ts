@@ -15,6 +15,6 @@ export class UsersMutationResolver {
   ) {
     const { id } = user;
     const upload = await this.usersService.uploadProfilePic(image, id);
-    console.log(upload);
+    return upload;
   }
 }

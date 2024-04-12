@@ -14,15 +14,11 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET || JWT_SECRET,
-      signOptions: { expiresIn: IS_PROD ? '1d' : '360d' },
+      signOptions: { expiresIn: IS_PROD == 'true' ? '1d' : '360d' },
     }),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, LocalStrategy],
   exports: [],
 })
-export class AuthModule {
-  constructor() {
-    console.log(process.env.JWT_SECRET || JWT_SECRET);
-  }
-}
+export class AuthModule {}

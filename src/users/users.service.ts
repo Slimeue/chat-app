@@ -53,6 +53,10 @@ export class UsersService {
   }
 
   async uploadProfilePic(image: FileUpload, userId: string): Promise<User> {
+    if (!image) {
+      throw new Error('Image is required');
+    }
+
     const { url, fileName, mimetype } = await this.commonService.uploadFile(
       image,
       userId,
