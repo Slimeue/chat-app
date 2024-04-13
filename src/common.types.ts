@@ -15,6 +15,12 @@ export class ChatRoomPaginationInput extends PaginationInput {
   userId?: string;
 }
 
+@InputType()
+export class FriendRequestPaginationInput extends PaginationInput {
+  @Field({ nullable: true })
+  userId?: string;
+}
+
 @ObjectType('Meta')
 export class Meta {
   @Field()
