@@ -8,6 +8,12 @@ export class CreateFriendRequestInput {
   requestedToId: string;
 }
 
+@InputType()
+export class DeleteFriendRequestInput {
+  @Field()
+  id: string;
+}
+
 @ObjectType()
 export class FriendRequestSearch {
   @Field(() => [FriendRequest], { nullable: true })

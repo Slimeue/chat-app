@@ -2,7 +2,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { v4 } from 'uuid';
 @ObjectType()
-@Schema()
+@Schema({ timestamps: true })
 export class FriendRequest {
   @Field(() => ID)
   @Prop({ required: true, default: v4 })

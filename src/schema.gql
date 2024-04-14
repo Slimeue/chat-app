@@ -77,11 +77,31 @@ type FriendRequestSearch {
   meta: Meta
 }
 
+type Friend {
+  id: ID!
+  userId: String
+  friendId: String!
+  friendName: String!
+  search(input: FriendPaginationInput!): FriendSearch!
+}
+
+input FriendPaginationInput {
+  page: Float = 1
+  limit: Float = 10
+  userId: String
+}
+
+type FriendSearch {
+  item: [Friend!]!
+  meta: Meta!
+}
+
 type Query {
   userQuery: User!
   messageQuery: Message
   chatRoomQuery: ChatRoom
   frienRequestQuery: FriendRequest
+  friendQuery: Friend!
 }
 
 type Mutation {
@@ -92,6 +112,8 @@ type Mutation {
   acceptInvitation(input: TokenInput!): ChatRoomMember!
   creatChatRoomInvitationToken(input: CreateChatRoomInvitationTokenInput!): ChatRoomInvitationToken!
   createFriendRequest(input: CreateFriendRequestInput!): FriendRequest!
+  deleteFriendRequest(input: DeleteFriendRequestInput!): FriendRequest!
+  createFriend(input: CreateFriendInput!): Friend!
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -122,6 +144,14 @@ input CreateChatRoomInvitationTokenInput {
 
 input CreateFriendRequestInput {
   requestedToId: String!
+}
+
+input DeleteFriendRequestInput {
+  id: String!
+}
+
+input CreateFriendInput {
+  friendRequestId: ID!
 }
 
 type Subscription {

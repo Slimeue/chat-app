@@ -22,6 +22,6 @@ import { UsersModule } from 'src/users/users.module';
     FriendRequestResolver,
     FriendRequestMutationResolver,
   ],
-  exports: [],
+  exports: [FriendRequestService],
 })
 export class FriendRequestModule {}

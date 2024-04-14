@@ -20,6 +20,7 @@ import { FirebaseModule } from './firebase/firebase.module';
 import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { CommonService } from './common.service';
 import { FriendRequestModule } from './friendRequest/friendRequest.module';
+import { FriendModule } from './friend/friend.module';
 @Module({
   imports: [
     MessageGatewayModule,
@@ -82,6 +83,7 @@ import { FriendRequestModule } from './friendRequest/friendRequest.module';
     ChatRoomMemberModule,
     ChatRoomInvitationTokenModule,
     FriendRequestModule,
+    FriendModule,
     FirebaseModule,
   ],
   controllers: [],

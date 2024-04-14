@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFriendRequestInput } from './friendRequest.types';
+import {
+  CreateFriendRequestInput,
+  DeleteFriendRequestInput,
+} from './friendRequest.types';
 import { InjectModel } from '@nestjs/mongoose';
 import { FriendRequest } from './friendRequest.schema';
 import { Model, PipelineStage } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
 import { FriendRequestPaginationInput } from 'src/common.types';
+import { SetError } from 'src/helper';
 
 @Injectable()
 export class FriendRequestService {
@@ -35,6 +39,26 @@ export class FriendRequestService {
     return friendRequest.save();
   }
 
+  async findOne(id: string) {
+    if (!id) {
+      SetError('No Id Found');
+    }
+
+    return await this.friendRequestModel.findOne({ id });
+  }
+
+  async delete(id: string) {
+    const friendRequest = await this.friendRequestModel.findOneAndDelete({
+      id,
+    });
+
+    if (!friendRequest) {
+      throw new Error('Friend request not found');
+    }
+
+    return friendRequest;
+  }
+
   async searchFriendRequest(id: string, input: FriendRequestPaginationInput) {
     const { limit, page } = input;
 
@@ -48,7 +72,7 @@ export class FriendRequestService {
 
     const match: PipelineStage.Match = {
       $match: {
-        requesterId: id,
+        requestedToId: id,
       },
     };
 
@@ -62,6 +86,8 @@ export class FriendRequestService {
               _id: null,
               total: { $sum: 1 },
             },
+          },
+          {
             $addFields: {
               page,
               limit,
@@ -81,11 +107,12 @@ export class FriendRequestService {
 
     aggregate.push(facet);
 
+    console.log(aggregate);
     const result = await this.friendRequestModel.aggregate(aggregate).exec();
 
     const item = result[0].docs;
     const meta = result[0].meta[0];
-
+    console.log(result[0]);
     return { item, meta };
   }
 }

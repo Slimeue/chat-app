@@ -1,24 +1,25 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { v4 } from 'uuid';
 
 @ObjectType()
 @Schema({ timestamps: true })
 export class Friend {
   @Field(() => ID)
-  @Prop()
+  @Prop({ default: v4 })
   id: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Prop()
-  userId: string;
+  userId: string; //requestedToId
 
   @Field()
   @Prop()
-  friendId: string;
+  friendId: string; //requesterId
 
   @Field()
   @Prop()
-  name: string;
+  friendName: string;
 }
 
 export const FriendSchema = SchemaFactory.createForClass(Friend);

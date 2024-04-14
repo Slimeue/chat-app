@@ -40,7 +40,6 @@ export class UsersService {
   }
 
   async findOne(email: string) {
-    console.log(email);
     if (!email) {
       throw new Error('Email is required');
     }

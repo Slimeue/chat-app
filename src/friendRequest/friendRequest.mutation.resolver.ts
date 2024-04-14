@@ -1,6 +1,9 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { FriendRequest } from './friendRequest.schema';
-import { CreateFriendRequestInput } from './friendRequest.types';
+import {
+  CreateFriendRequestInput,
+  DeleteFriendRequestInput,
+} from './friendRequest.types';
 import { CurrentUser } from 'src/auth/decorator/currentUser.decorator';
 import { User } from 'src/users/users.schema';
 import { FriendRequestService } from './friendRequest.service';
@@ -20,13 +23,23 @@ export class FriendRequestMutationResolver {
       throw new Error('No ID found');
     }
 
-    console.log(user);
-
     const friendRequest = await this.friendRequestService.create(
       id,
       name,
       input,
     );
+
+    return friendRequest;
+  }
+
+  @Mutation(() => FriendRequest)
+  async deleteFriendRequest(@Args('input') input: DeleteFriendRequestInput) {
+    const { id } = input;
+    if (!id) {
+      throw new Error('No ID found');
+    }
+
+    const friendRequest = await this.friendRequestService.delete(id);
 
     return friendRequest;
   }
