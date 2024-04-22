@@ -27,8 +27,6 @@ export class CommonService {
           const downloadUrl =
             await this.firebaseService.getDownloadUrl(fileName);
 
-          console.log(downloadUrl);
-
           resolve({
             url: `${downloadUrl}`,
             fileName,
