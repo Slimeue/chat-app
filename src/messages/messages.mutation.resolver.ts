@@ -46,12 +46,8 @@ export class MessagesMutationResolver {
 
     const files = await Promise.all(images);
 
-    console.log(files);
-
     const result = await this.commonService.uploadMultipleImage(files, id);
-
-    console.log(result);
-
+    //#TODO implement message sending with multiple images if not empty
     return null;
   }
 }
