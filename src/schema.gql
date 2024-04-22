@@ -107,6 +107,7 @@ type Query {
 type Mutation {
   addProfileImage(image: Upload!): User!
   createMessage(input: CreateMessageInput!): Message!
+  addImages(images: [Upload!]!): Message!
   createChatRoom(input: CreateChatRoomInput!): ChatRoom!
   createChatRoomMember(input: CreateChatRoomMemberInput!): ChatRoomMember!
   acceptInvitation(input: TokenInput!): ChatRoomMember!

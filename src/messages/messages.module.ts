@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Mongoose } from 'mongoose';
 import { Message, MessageSchema } from './messages.schema';
@@ -6,6 +6,7 @@ import { MessagesResolver } from './messages.resolver';
 import { PubsubModule } from 'src/pubsub/pubsub.module';
 import { MessagesMutationResolver } from './messages.mutation.resolver';
 import { MessagesService } from './messages.service';
+import { AppModule } from 'src/app.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { MessagesService } from './messages.service';
         schema: MessageSchema,
       },
     ]),
+    forwardRef(() => AppModule),
   ],
   controllers: [],
   providers: [MessagesResolver, MessagesMutationResolver, MessagesService],

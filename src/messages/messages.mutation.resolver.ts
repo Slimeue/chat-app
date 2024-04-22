@@ -11,10 +11,13 @@ import { Inject } from '@nestjs/common';
 import { PUB_SUB } from 'src/pubsub/pubsub.module';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { SUBSCIRTION_EVENTS } from 'src/constants';
-
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { FileUpload } from 'graphql-upload';
+import { CommonService } from 'src/common.service';
 @Resolver(() => Message)
 export class MessagesMutationResolver {
   constructor(
+    private readonly commonService: CommonService,
     private readonly messageService: MessagesService,
     @Inject(PUB_SUB) private readonly pubSub: RedisPubSub,
   ) {}
@@ -32,5 +35,23 @@ export class MessagesMutationResolver {
       },
     );
     return message;
+  }
+
+  @Mutation(() => Message)
+  async addImages(
+    @Args('images', { type: () => [GraphQLUpload] }) images: FileUpload[],
+    @CurrentUser() user: User,
+  ) {
+    const { id } = user;
+
+    const files = await Promise.all(images);
+
+    console.log(files);
+
+    const result = await this.commonService.uploadMultipleImage(files, id);
+
+    console.log(result);
+
+    return null;
   }
 }

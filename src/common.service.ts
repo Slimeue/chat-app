@@ -36,6 +36,50 @@ export class CommonService {
         .on('error', rejects);
     });
   }
+
+  async uploadMultipleImage(
+    file: FileUpload[],
+    userId: string,
+  ): Promise<FileUpload[]> {
+    const images = await file;
+
+    const storage = await this.firebaseService.getStorageInstance();
+
+    const bucket = storage.bucket();
+
+    const uploads = [];
+
+    for (const image of images) {
+      const { createReadStream, filename, mimetype } = image;
+
+      console.log(filename);
+
+      const fileName = `${userId}/${filename}`;
+      const bucketFile = bucket.file(fileName);
+
+      await new Promise(async (resolve, rejects) => {
+        createReadStream()
+          .pipe(bucketFile.createWriteStream())
+          .on('finish', async () => {
+            await bucket.file(fileName).makePublic();
+
+            const downloadUrl =
+              await this.firebaseService.getDownloadUrl(fileName);
+
+            const result = {
+              url: `${downloadUrl}`,
+              fileName,
+              mimetype,
+            };
+
+            uploads.push(result);
+            resolve(uploads);
+          })
+          .on('error', rejects);
+      });
+    }
+    return uploads;
+  }
 }
 
 export const hashPassword = async (
