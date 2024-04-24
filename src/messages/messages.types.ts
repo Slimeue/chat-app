@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-
+import * as GraphQlUpload from 'graphql-upload/GraphQLUpload.js';
+import { FileUpload } from 'graphql-upload';
 @InputType()
 export class CreateMessageInput {
   @Field()

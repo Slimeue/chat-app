@@ -13,6 +13,14 @@ export class Message {
   @Prop()
   content: string;
 
+  @Field(() => [String])
+  @Prop()
+  media_url: string[];
+
+  @Field(() => [String])
+  @Prop()
+  media_name: string[];
+
   @Field(() => String, { nullable: true })
   @Prop()
   senderId: string;

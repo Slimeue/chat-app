@@ -6,8 +6,8 @@ import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginResponse, UserLogInInput } from './auth.types';
 import { JWT_SECRET } from 'src/config';
-import { omit } from 'lodash';
 import { IsPublic } from 'src/CustomDecorator/IsPublic.decorator';
+import { omit } from 'lodash';
 
 @Controller('auth')
 export class AuthController {

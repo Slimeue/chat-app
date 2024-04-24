@@ -37,10 +37,7 @@ export class CommonService {
     });
   }
 
-  async uploadMultipleImage(
-    file: FileUpload[],
-    userId: string,
-  ): Promise<FileUpload[]> {
+  async uploadMultipleImage(file: FileUpload[], userId: string): Promise<any> {
     const images = await file;
 
     const storage = await this.firebaseService.getStorageInstance();
@@ -51,8 +48,6 @@ export class CommonService {
 
     for (const image of images) {
       const { createReadStream, filename, mimetype } = image;
-
-      console.log(filename);
 
       const fileName = `${userId}/${filename}`;
       const bucketFile = bucket.file(fileName);

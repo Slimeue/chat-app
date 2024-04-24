@@ -14,6 +14,7 @@ import { SUBSCIRTION_EVENTS } from 'src/constants';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'graphql-upload';
 import { CommonService } from 'src/common.service';
+import { isEmpty } from 'lodash';
 @Resolver(() => Message)
 export class MessagesMutationResolver {
   constructor(
@@ -24,10 +25,20 @@ export class MessagesMutationResolver {
   @Mutation(() => Message)
   async createMessage(
     @Args('input') input: CreateMessageInput,
-    @CurrentUser() user: User,
+    @Args('images', { type: () => [GraphQLUpload], nullable: true })
+    images: FileUpload[],
+    @CurrentUser()
+    user: User,
   ) {
     const { id } = user;
-    const message = await this.messageService.create(input, id);
+
+    let uploads: FileUpload[];
+
+    if (!isEmpty(images)) {
+      uploads = await Promise.all(images);
+    }
+
+    const message = await this.messageService.create(input, id, uploads);
     await this.pubSub.publish(
       `${SUBSCIRTION_EVENTS.MESSAGE_CREATED}:${input.receiverId}`,
       {
@@ -48,6 +59,7 @@ export class MessagesMutationResolver {
 
     const result = await this.commonService.uploadMultipleImage(files, id);
     //#TODO implement message sending with multiple images if not empty
+
     return null;
   }
 }

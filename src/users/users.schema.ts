@@ -16,7 +16,7 @@ export class User {
 
   @Field({ nullable: true })
   @Prop()
-  password: string;
+  password?: string;
 
   @Field({ nullable: true })
   @Prop()
