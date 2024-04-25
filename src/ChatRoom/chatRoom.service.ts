@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateChatRoomInput } from './chatRoom.types';
 import { ChatRoomPaginationInput } from 'src/common.types';
 import { ChatRoomMemberService } from 'src/ChatRoomMember/chatRoomMember.service';
+import { RoomType } from 'src/constants';
 
 @Injectable()
 export class ChatRoomService {
@@ -14,10 +15,11 @@ export class ChatRoomService {
     private readonly chatRoomMemberService: ChatRoomMemberService,
   ) {}
 
-  async create(id: string, input: CreateChatRoomInput) {
+  async create(id: string, input: CreateChatRoomInput, type?: RoomType) {
     const chatRoom = await new this.chatRoomModel({
       ...input,
       ownerId: id,
+      roomType: type,
     });
 
     return chatRoom.save();
@@ -61,9 +63,9 @@ export class ChatRoomService {
             },
           ],
           docs: [
-            {
-              $skip: limit * (page - 1),
-            },
+            // {
+            //   $skip: limit * (page - 1),
+            // },
             {
               $limit: limit,
             },
