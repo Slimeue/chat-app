@@ -17,8 +17,10 @@ type Message {
   content: String!
   media_url: [String!]!
   media_name: [String!]!
-  senderId: String
-  receiverId: String
+  senderId: String!
+  senderName: String!
+  receiverId: String!
+  receiverName: String!
   messages(input: MessagePaginationInput!): [Message!]
 }
 

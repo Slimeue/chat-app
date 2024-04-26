@@ -21,13 +21,21 @@ export class Message {
   @Prop()
   media_name: string[];
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String, { nullable: false })
   @Prop()
   senderId: string;
 
-  @Field(() => String, { nullable: true })
+  @Field({ nullable: false })
+  @Prop()
+  senderName: string;
+
+  @Field(() => String, { nullable: false })
   @Prop()
   receiverId: string;
+
+  @Field({ nullable: false })
+  @Prop()
+  receiverName: string;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);

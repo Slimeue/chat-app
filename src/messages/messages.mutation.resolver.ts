@@ -30,7 +30,7 @@ export class MessagesMutationResolver {
     @CurrentUser()
     user: User,
   ) {
-    const { id } = user;
+    const { id, name } = user;
 
     let uploads: FileUpload[];
 
@@ -38,7 +38,7 @@ export class MessagesMutationResolver {
       uploads = await Promise.all(images);
     }
 
-    const message = await this.messageService.create(input, id, uploads);
+    const message = await this.messageService.create(input, id, name, uploads);
     await this.pubSub.publish(
       `${SUBSCIRTION_EVENTS.MESSAGE_CREATED}:${input.receiverId}`,
       {

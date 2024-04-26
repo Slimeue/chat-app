@@ -8,6 +8,7 @@ import { MessagesMutationResolver } from './messages.mutation.resolver';
 import { MessagesService } from './messages.service';
 import { AppModule } from 'src/app.module';
 import { ChatRoomModule } from 'src/ChatRoom/chatRoom.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ChatRoomModule } from 'src/ChatRoom/chatRoom.module';
     ]),
     forwardRef(() => AppModule),
     forwardRef(() => ChatRoomModule),
+    forwardRef(() => UsersModule),
   ],
   controllers: [],
   providers: [MessagesResolver, MessagesMutationResolver, MessagesService],

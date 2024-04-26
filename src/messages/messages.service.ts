@@ -7,6 +7,7 @@ import { CommonService } from 'src/common.service';
 import { isEmpty } from 'lodash';
 import { ChatRoomService } from 'src/ChatRoom/chatRoom.service';
 import { MessagePaginationInput } from 'src/common.types';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class MessagesService {
@@ -15,13 +16,22 @@ export class MessagesService {
     private readonly messageModel: Model<Message>,
     private readonly commonService: CommonService,
     private readonly chatRoomService: ChatRoomService,
+    private readonly userService: UsersService,
   ) {}
-  async create(input: CreateMessageInput, userId: string, images?: any) {
+  async create(
+    input: CreateMessageInput,
+    userId: string,
+    userName: string,
+    images?: any,
+  ) {
     const { content, receiverId } = input;
+
+    const receiverName = await this.userService.findOneById(receiverId);
 
     const message = await new this.messageModel({
       content,
       senderId: userId,
+      senderName: userName,
       receiverId,
     });
 
