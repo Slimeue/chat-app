@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Friend } from './friend.schema';
 import { Model, PipelineStage } from 'mongoose';
@@ -9,6 +9,10 @@ import { FriendPaginationInput } from 'src/common.types';
 import { UsersService } from 'src/users/users.service';
 import { FriendRequestService } from 'src/friendRequest/friendRequest.service';
 import { SetError } from 'src/helper';
+import { isEmpty } from 'lodash';
+import { ChatRoomService } from 'src/ChatRoom/chatRoom.service';
+import { RoomType } from 'src/constants';
+import { ChatRoomMemberService } from 'src/ChatRoomMember/chatRoomMember.service';
 
 @Injectable()
 export class FriendService {
@@ -17,6 +21,8 @@ export class FriendService {
     private readonly friendModel: Model<Friend>,
     private readonly userService: UsersService,
     private readonly friendRequestService: FriendRequestService,
+    private readonly chatRoomService: ChatRoomService,
+    private readonly chatRoomMember: ChatRoomMemberService,
   ) {}
 
   async create(id: string, input: CreateFriendInput) {
@@ -31,6 +37,10 @@ export class FriendService {
     }
 
     const friendReq = await this.friendRequestService.findOne(friendRequestId);
+
+    if (isEmpty(friendReq)) {
+      throw new HttpException('No friendRequest found', HttpStatus.NOT_FOUND);
+    }
 
     const { requesterId } = friendReq;
 
@@ -53,6 +63,24 @@ export class FriendService {
       friendName: name,
       friendId: foundRequester.id,
       userId: id,
+    });
+
+    const chatRoom = await this.chatRoomService.create(
+      id,
+      {
+        name: RoomType.FRIEND,
+      },
+      RoomType.FRIEND,
+    );
+
+    await this.chatRoomMember.create({
+      chatRoomId: chatRoom.id,
+      userId: id,
+    });
+
+    await this.chatRoomMember.create({
+      chatRoomId: chatRoom.id,
+      userId: requesterId,
     });
 
     return friend;

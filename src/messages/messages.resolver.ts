@@ -15,6 +15,7 @@ import { CurrentUser } from 'src/auth/decorator/currentUser.decorator';
 import { User } from 'src/users/users.schema';
 import { MessagesService } from './messages.service';
 import { CreateMessageSubscriptionInput } from './messages.types';
+import { MessagePaginationInput } from 'src/common.types';
 
 @Resolver(() => Message)
 export class MessagesResolver {
@@ -30,12 +31,13 @@ export class MessagesResolver {
   }
 
   @ResolveField(() => [Message], { nullable: true })
-  async messages(@Args('receiverId') receiverId: string) {
+  async messages(@Args('input') input: MessagePaginationInput) {
     //todo implement this
+    const { receiverId } = input;
     if (!receiverId) {
       throw new Error('Room ID is required');
     }
-    const messages = await this.messageService.findMessagesByRoomId(receiverId);
+    const messages = await this.messageService.findMessagesByRoomId(input);
     return messages;
   }
 

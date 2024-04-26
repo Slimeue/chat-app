@@ -19,7 +19,13 @@ type Message {
   media_name: [String!]!
   senderId: String
   receiverId: String
-  messages(receiverId: String!): [Message!]
+  messages(input: MessagePaginationInput!): [Message!]
+}
+
+input MessagePaginationInput {
+  page: Float = 1
+  limit: Float = 10
+  receiverId: String!
 }
 
 type ChatRoom {

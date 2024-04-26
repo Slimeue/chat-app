@@ -27,6 +27,12 @@ export class FriendPaginationInput extends PaginationInput {
   userId?: string;
 }
 
+@InputType()
+export class MessagePaginationInput extends PaginationInput {
+  @Field()
+  receiverId: string;
+}
+
 @ObjectType('Meta')
 export class Meta {
   @Field()

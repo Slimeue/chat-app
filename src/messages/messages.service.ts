@@ -6,6 +6,7 @@ import { Message } from './messages.schema';
 import { CommonService } from 'src/common.service';
 import { isEmpty } from 'lodash';
 import { ChatRoomService } from 'src/ChatRoom/chatRoom.service';
+import { MessagePaginationInput } from 'src/common.types';
 
 @Injectable()
 export class MessagesService {
@@ -49,13 +50,16 @@ export class MessagesService {
     return message.save();
   }
 
-  async findMessagesByRoomId(receiverId: string) {
+  async findMessagesByRoomId(input: MessagePaginationInput) {
+    const { receiverId, limit = 10 } = input;
     if (!receiverId) {
       throw new Error('Room id is empty');
     }
-    const messages = await this.messageModel.find({
-      receiverId,
-    });
+    const messages = await this.messageModel
+      .find({
+        receiverId,
+      })
+      .limit(limit);
     return messages;
   }
 }

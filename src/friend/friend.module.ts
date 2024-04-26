@@ -6,6 +6,8 @@ import { FriendResolver } from './friend.resolver';
 import { UsersModule } from 'src/users/users.module';
 import { FriendService } from './friend.service';
 import { FriendRequestModule } from 'src/friendRequest/friendRequest.module';
+import { ChatRoomModule } from 'src/ChatRoom/chatRoom.module';
+import { ChatRoomMemberModule } from 'src/ChatRoomMember/chatRoomMember.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { FriendRequestModule } from 'src/friendRequest/friendRequest.module';
     ]),
     forwardRef(() => UsersModule),
     forwardRef(() => FriendRequestModule),
+    forwardRef(() => ChatRoomModule),
+    forwardRef(() => ChatRoomMemberModule),
   ],
   controllers: [],
   providers: [FriendMutationResolver, FriendResolver, FriendService],
