@@ -18,4 +18,14 @@ export class FirebaseService {
 
     return downloadUrl;
   }
+
+  async getMetaData(fileName: string) {
+    const bucket = this.storage.bucket();
+
+    const ref = bucket.file(fileName);
+
+    const metaData = await ref.getMetadata();
+
+    return metaData;
+  }
 }

@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { Message } from './messages.schema';
 import { CommonService } from 'src/common.service';
 import { isEmpty } from 'lodash';
+import { ChatRoomService } from 'src/ChatRoom/chatRoom.service';
 
 @Injectable()
 export class MessagesService {
@@ -12,6 +13,7 @@ export class MessagesService {
     @InjectModel(Message.name)
     private readonly messageModel: Model<Message>,
     private readonly commonService: CommonService,
+    private readonly chatRoomService: ChatRoomService,
   ) {}
   async create(input: CreateMessageInput, userId: string, images?: any) {
     const { content, receiverId } = input;
@@ -22,6 +24,8 @@ export class MessagesService {
       receiverId,
     });
 
+    const chatRoom = await this.chatRoomService.findOne(receiverId);
+
     if (!isEmpty(images)) {
       const resultUpload = await this.commonService.uploadMultipleImage(
         images,
@@ -29,11 +33,19 @@ export class MessagesService {
       );
 
       for (const image of resultUpload) {
+        const media_type =
+          image.mimetype.split('/')[0] === 'image'
+            ? chatRoom.media_image_url.push(image.url)
+            : image.mimetype.split('/')[0] === 'video'
+              ? chatRoom.media_videoes_url.push(image.url)
+              : chatRoom.media_file_url.push(image.url);
+
         message.media_url.push(image.url);
         message.media_name.push(image.fileName);
       }
     }
 
+    await chatRoom.save();
     return message.save();
   }
 

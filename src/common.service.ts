@@ -61,10 +61,12 @@ export class CommonService {
             const downloadUrl =
               await this.firebaseService.getDownloadUrl(fileName);
 
+            const metaData = await this.firebaseService.getMetaData(fileName);
+
             const result = {
               url: `${downloadUrl}`,
               fileName,
-              mimetype,
+              mimetype: metaData[0].contentType,
             };
 
             uploads.push(result);

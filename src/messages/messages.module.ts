@@ -7,6 +7,7 @@ import { PubsubModule } from 'src/pubsub/pubsub.module';
 import { MessagesMutationResolver } from './messages.mutation.resolver';
 import { MessagesService } from './messages.service';
 import { AppModule } from 'src/app.module';
+import { ChatRoomModule } from 'src/ChatRoom/chatRoom.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AppModule } from 'src/app.module';
       },
     ]),
     forwardRef(() => AppModule),
+    forwardRef(() => ChatRoomModule),
   ],
   controllers: [],
   providers: [MessagesResolver, MessagesMutationResolver, MessagesService],

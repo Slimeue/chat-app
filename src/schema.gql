@@ -26,6 +26,10 @@ type ChatRoom {
   id: String!
   name: String!
   ownerId: String!
+  roomType: String!
+  media_image_url: [String!]!
+  media_videoes_url: [String!]!
+  media_file_url: [String!]!
   chatRooms(input: ChatRoomPaginationInput!): ChatRoomSearch
 }
 
